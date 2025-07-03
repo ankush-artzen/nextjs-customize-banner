@@ -25,30 +25,20 @@ class="countdown-timer btn-{{ block.settings.button_position }} countdown-{{ blo
   {% endif %}
 
 
- {% case block.settings.announcement_type %}
-  {% when "Marquee" %}
-    {% assign marquee_messages = block.settings.carousel_messages | newline_to_br | split: "<br />" %}
-
-{% assign looped_messages = marquee_messages %}
-{% assign looped_messages = looped_messages | concat: marquee_messages %}
-{% assign looped_messages = looped_messages | concat: marquee_messages %}
-{% assign looped_messages = looped_messages | concat: marquee_messages %}
-{% assign looped_messages = looped_messages | concat: marquee_messages %}
-{% assign looped_messages = looped_messages | concat: marquee_messages %}
-{% assign looped_messages = looped_messages | concat: marquee_messages %}
-{% assign looped_messages = looped_messages | concat: marquee_messages %}
-{% assign looped_messages = looped_messages | concat: marquee_messages %}
-{% assign looped_messages = looped_messages | concat: marquee_messages %}
+{% assign marquee_messages = block.settings.carousel_messages | newline_to_br | split: "<br />" %}
+{% assign loop_count = 100 %}
 
 <div class="marquee-wrapper" role="region" aria-label="Announcement marquee">
   <div class="marquee-track" style="--marquee-speed: {{ block.settings.marquee_speed | default: 20 }}s;">
-    {% for msg in looped_messages %}
+    {% for i in (0..99) %}
+      {% assign msg_index = i | modulo: marquee_messages.size %}
       <div class="marquee-content" style="color: {{ block.settings.text_color }};">
-        {{ msg | strip }}
+        {{ marquee_messages[msg_index] | strip }}
       </div>
     {% endfor %}
   </div>
 </div>
+
 
 
 
