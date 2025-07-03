@@ -3,7 +3,7 @@
 client_id = "8e80e8f79549c9b5f63321da68c7f33e"
 name = "Customize promotional Banner"
 handle = "test-app-12210"
-application_url = "https://footage-pmid-analyzed-marshall.trycloudflare.com"
+application_url = "https://fa99-2403-8940-23-106-341-ff04-417a-228b.ngrok-free.app"
 embedded = true
 
 [build]
@@ -21,9 +21,9 @@ scopes = "read_orders,write_orders,write_products"
 
 [auth]
 redirect_urls = [
-  "https://footage-pmid-analyzed-marshall.trycloudflare.com/auth/callback",
-  "https://footage-pmid-analyzed-marshall.trycloudflare.com/auth/shopify/callback",
-  "https://footage-pmid-analyzed-marshall.trycloudflare.com/api/auth/callback"
+  "https://fa99-2403-8940-23-106-341-ff04-417a-228b.ngrok-free.app/auth/callback",
+  "https://fa99-2403-8940-23-106-341-ff04-417a-228b.ngrok-free.app/auth/shopify/callback",
+  "https://fa99-2403-8940-23-106-341-ff04-417a-228b.ngrok-free.app/api/auth/callback"
 ]
 
 [webhooks]
