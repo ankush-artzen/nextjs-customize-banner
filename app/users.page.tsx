@@ -21,7 +21,7 @@ export default function Home() {
       <Card>
         <div style={{ padding: '20px' }}>
           <Text as="p" variant="bodyMd">
-            Open your stores Theme Editor directly to the section where your extension is installed.
+           Please check  Theme Editor directly to the section where extension is installed.
           </Text>
           {editorUrl ? (
             <div style={{ marginTop: '16px' }}>
