@@ -25,18 +25,33 @@ class="countdown-timer btn-{{ block.settings.button_position }} countdown-{{ blo
   {% endif %}
 
 
-  {% case block.settings.announcement_type %}
-    {% when "Marquee" %}
-      {% assign marquee_messages = block.settings.carousel_messages | newline_to_br | split: "<br />" %}
-      <div class="marquee-wrapper" role="region" aria-label="Announcement marquee">
-        <div class="marquee-track" style="--marquee-speed: {{ block.settings.marquee_speed | default: 20 }}s;">
-          {% for i in (1..100) %}
-            {% for msg in marquee_messages %}
-              <div class="marquee-content" style="color: {{ block.settings.text_color }};">{{ msg }}</div>
-            {% endfor %}
-          {% endfor %}
-        </div>
+ {% case block.settings.announcement_type %}
+  {% when "Marquee" %}
+    {% assign marquee_messages = block.settings.carousel_messages | newline_to_br | split: "<br />" %}
+
+{% assign looped_messages = marquee_messages %}
+{% assign looped_messages = looped_messages | concat: marquee_messages %}
+{% assign looped_messages = looped_messages | concat: marquee_messages %}
+{% assign looped_messages = looped_messages | concat: marquee_messages %}
+{% assign looped_messages = looped_messages | concat: marquee_messages %}
+{% assign looped_messages = looped_messages | concat: marquee_messages %}
+{% assign looped_messages = looped_messages | concat: marquee_messages %}
+{% assign looped_messages = looped_messages | concat: marquee_messages %}
+{% assign looped_messages = looped_messages | concat: marquee_messages %}
+{% assign looped_messages = looped_messages | concat: marquee_messages %}
+
+<div class="marquee-wrapper" role="region" aria-label="Announcement marquee">
+  <div class="marquee-track" style="--marquee-speed: {{ block.settings.marquee_speed | default: 20 }}s;">
+    {% for msg in looped_messages %}
+      <div class="marquee-content" style="color: {{ block.settings.text_color }};">
+        {{ msg | strip }}
       </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
 
     {% when "Carousel" %}
       {% assign messages = block.settings.carousel_messages | newline_to_br | split: "<br />" %}
