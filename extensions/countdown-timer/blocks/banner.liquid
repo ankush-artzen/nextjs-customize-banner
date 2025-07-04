@@ -1,5 +1,6 @@
 <div
-class="countdown-timer btn-{{ block.settings.button_position }} countdown-{{ block.settings.announcement_type | downcase }}"  data-end-date="{{ block.settings.end_date | date: '%Y-%m-%dT%H:%M:%S%z' }}"
+  class="countdown-timer btn-{{ block.settings.button_position }} countdown-{{ block.settings.announcement_type | downcase }}"
+  data-end-date="{{ block.settings.end_date | date: '%Y-%m-%dT%H:%M:%S%z' }}"
   data-max-views="{{ block.settings.max_views }}"
   data-enable-view-limit="{{ block.settings.enable_view_limit }}"
   style="
@@ -11,37 +12,65 @@ class="countdown-timer btn-{{ block.settings.button_position }} countdown-{{ blo
     padding: 10px;
   "
 >
-{% if block.settings.enable_button_link and block.settings.button_url != blank and block.settings.announcement_type == 'Simple' %}
-    <div class="btn-wrapper">
-      {% if block.settings.show_button %}
-        <a href="{{ block.settings.button_url }}" class="countdown-link-btn"
-           style="background-color:{{ block.settings.text_color }}; color:{{ block.settings.bg_color }};">
-          {{ block.settings.button_label }}
-        </a>
-      {% else %}
-        <a href="{{ block.settings.button_url }}">{{ block.settings.button_label }}</a>
+
+  {% case block.settings.announcement_type %}
+    {% when "Simple" %}
+      <h4 style="font-weight: 600; margin: 5px 0; color: {{ block.settings.text_color }};">
+        {{ block.settings.title }}
+      </h4>
+
+      {% if block.settings.enable_button_link and block.settings.button_url != blank %}
+        <div class="btn-wrapper">
+          {% if block.settings.show_button %}
+            <a href="{{ block.settings.button_url }}" class="countdown-link-btn"
+              style="background-color: {{ block.settings.text_color }}; color: {{ block.settings.bg_color }}; padding: 8px 16px; font-weight: bold; border-radius: 4px;">
+              {{ block.settings.button_label }}
+            </a>
+          {% else %}
+            <a href="{{ block.settings.button_url }}" style="text-decoration: underline; color: {{ block.settings.text_color }};">
+              {{ block.settings.button_label }}
+            </a>
+          {% endif %}
+        </div>
       {% endif %}
-    </div>
-  {% endif %}
 
+      {% if block.settings.show_timer and block.settings.end_date != blank %}
+        <div class="timer-display" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 0 auto; max-width: 400px;">
+          {% assign units = "Days,Hours,Minutes,Seconds" | split: "," %}
+          {% for unit in units %}
+            <div class="timer-block" style="display: flex; flex-direction: column; min-width: 50px;">
+              <span class="timer-block__num js-timer-{{ unit | downcase }}"
+                style="background: #ffffff; border-radius: 4px; font-size: 1.2em; font-weight: 600; padding: 4px 6px; margin-bottom: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.08); color: #000000;">
+                00
+              </span>
+              <span class="timer-block__unit"
+                style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.4px; color: {{ block.settings.text_color }};">
+                {{ unit }}
+              </span>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="timer-expired-message" style="display: none;">
+          <p style="color: #e53e3e; font-weight: 500; margin-top: 10px;">⏰ This offer has expired!</p>
+        </div>
+      {% elsif block.settings.show_timer %}
+        <div class="timer-error">
+          <p style="color: #e53e3e; font-weight: 500; margin-top: 10px;">⚠️ Please set a valid end date (format: YYYY-MM-DD or YYYY-MM-DD HH:MM:SS)</p>
+        </div>
+      {% endif %}
 
-{% assign marquee_messages = block.settings.carousel_messages | newline_to_br | split: "<br />" %}
-{% assign loop_count = 100 %}
-
-<div class="marquee-wrapper" role="region" aria-label="Announcement marquee">
-  <div class="marquee-track" style="--marquee-speed: {{ block.settings.marquee_speed | default: 20 }}s;">
-    {% for i in (0..99) %}
-      {% assign msg_index = i | modulo: marquee_messages.size %}
-      <div class="marquee-content" style="color: {{ block.settings.text_color }};">
-        {{ marquee_messages[msg_index] | strip }}
+    {% when "Marquee" %}
+      {% assign marquee_messages = block.settings.carousel_messages | newline_to_br | split: "<br />" %}
+      <div class="marquee-wrapper" role="region" aria-label="Announcement marquee">
+        <div class="marquee-track" style="--marquee-speed: {{ block.settings.marquee_speed | default: 20 }}s;">
+          {% for i in (0..50) %}
+            {% assign msg_index = i | modulo: marquee_messages.size %}
+            <div class="marquee-content" style="color: {{ block.settings.text_color }};">
+              {{ marquee_messages[msg_index] | strip }}
+            </div>
+          {% endfor %}
+        </div>
       </div>
-    {% endfor %}
-  </div>
-</div>
-
-
-
-
 
     {% when "Carousel" %}
       {% assign messages = block.settings.carousel_messages | newline_to_br | split: "<br />" %}
@@ -54,44 +83,17 @@ class="countdown-timer btn-{{ block.settings.button_position }} countdown-{{ blo
           {% endfor %}
         </div>
       </div>
-
-    {% else %}
-      <h4 style="font-size: 1.3em; font-weight: 600; margin: 5px; color: {{ block.settings.text_color }};">
-        {{ block.settings.title }}
-      </h4>
   {% endcase %}
-
-  {% if block.settings.show_timer and block.settings.end_date != blank %}
-    <div class="timer-display" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin: 0 auto; max-width: 500px;">
-      {% assign units = "Days,Hours,Minutes,Seconds" | split: "," %}
-      {% for unit in units %}
-        <div class="timer-block" style="display: flex; flex-direction: column; min-width: 70px;">
-          <span class="timer-block__num js-timer-{{ unit | downcase }}" style="background: #ffffff; border-radius: 4px; font-size: 1.8em; font-weight: 700; padding: 8px 12px; margin-bottom: 5px; box-shadow: 0 2px 3px rgba(0,0,0,0.1); color: #000000;">00</span>
-          <span class="timer-block__unit" style="font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.5px; color: {{ block.settings.text_color }};">{{ unit }}</span>
-        </div>
-      {% endfor %}
-    </div>
-    <div class="timer-expired-message" style="display: none;">
-      <p style="color: #e53e3e; font-weight: 500; margin-top: 10px;">⏰ This offer has expired!</p>
-    </div>
-  {% elsif block.settings.show_timer %}
-    <div class="timer-error">
-      <p style="color: #e53e3e; font-weight: 500; margin-top: 10px;">⚠️ Please set a valid end date (format: YYYY-MM-DD or YYYY-MM-DD HH:MM:SS)</p>
-    </div>
-  {% endif %}
 </div>
 
 {{ 'countdown-timer.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'countdown-timer.js' | asset_url }}" defer></script>
-
-
 
 {% schema %}
 {
   "name": "Countdown Timer",
   "target": "section",
   "settings": [
-    
     {
       "type": "select",
       "id": "announcement_type",
@@ -125,9 +127,13 @@ class="countdown-timer btn-{{ block.settings.button_position }} countdown-{{ blo
       "default": 20
     },
     {
+      "type": "paragraph",
+      "content": "Note: Countdown timer is only available in the Simple announcement type."
+    },
+    {
       "type": "checkbox",
       "id": "show_timer",
-      "label": "Show Countdown Timer",
+      "label": "Show Countdown Timer (Simple Only)",
       "default": true
     },
     {
@@ -148,7 +154,7 @@ class="countdown-timer btn-{{ block.settings.button_position }} countdown-{{ blo
       "label": "Text Color",
       "default": "#1a365d"
     },
-     {
+    {
       "type": "checkbox",
       "id": "enable_button_link",
       "label": "Show Button",
@@ -161,10 +167,9 @@ class="countdown-timer btn-{{ block.settings.button_position }} countdown-{{ blo
       "default": false
     },
     {
-  "type": "paragraph",
-  "content": "Note: You can use button only in the Simple announcement type "
-},
-   
+      "type": "paragraph",
+      "content": "Note: Button work only in the 'Simple' type."
+    },
     {
       "type": "select",
       "id": "button_position",
