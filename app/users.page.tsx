@@ -12,19 +12,28 @@ export default function Home() {
 
   useEffect(() => {
     if (app?.config?.shop) {
-      setEditorUrl(`https://${app.config.shop}/admin/themes/current/editor?context=app`);
+      setEditorUrl(
+        `https://${app.config.shop}/admin/themes/current/editor?context=app`,
+      );
     }
   }, [app]);
 
   return (
     <Page title="Theme Extension">
       <Card>
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: "20px" }}>
           <Text as="p" variant="bodyMd">
-           Please check  Theme Editor directly to the section where extension is installed.
+            Please check Theme Editor directly to the section where extension
+            customize banner extension is installed.
           </Text>
           {editorUrl ? (
-            <div style={{ marginTop: '16px' }}>
+            <div
+              style={{
+                marginTop: "16px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               <Link href={editorUrl} target="_blank">
                 <Button>Open Theme Editor</Button>
               </Link>
